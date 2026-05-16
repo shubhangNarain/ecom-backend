@@ -1,0 +1,166 @@
+[
+  {
+    "id": 1,
+    "name": "Studio Pro Headphones",
+    "category": "Audio",
+    "price": "249",
+    "oldPrice": "329",
+    "tag": "Sale",
+    "image": "/product_headphones.png",
+    "description": "Professional-grade noise cancelling headphones designed for creators and music enthusiasts. Experience unrivaled sound clarity and comfort.",
+    "features": [
+      "Active Noise Cancellation",
+      "40h Battery Life",
+      "High-Res Audio Support",
+      "Foldable Design"
+    ],
+    "specs": {
+      "Driver": "40mm Dynamic",
+      "Connectivity": "Bluetooth 5.2",
+      "Weight": "250g",
+      "Charging": "USB-C Fast Charge"
+    }
+  },
+  {
+    "id": 2,
+    "name": "FitPulse Smartwatch",
+    "category": "Wearables",
+    "price": "199",
+    "tag": "New",
+    "image": "/product_smartwatch.png",
+    "description": "The ultimate fitness companion. Track your health, stay connected, and push your limits with the water-resistant FitPulse.",
+    "features": [
+      "Heart Rate Monitor",
+      "GPS Tracking",
+      "Water Resistant",
+      "Sleep Analysis"
+    ],
+    "specs": {
+      "Display": "1.8\" AMOLED",
+      "Battery": "Up to 7 days",
+      "Sensors": "SpO2, ECG",
+      "Compatibility": "iOS & Android"
+    }
+  },
+  {
+    "id": 3,
+    "name": "AirPods Pro Max",
+    "category": "Audio",
+    "price": "149",
+    "oldPrice": "179",
+    "image": "/product_earbuds.png",
+    "description": "Iconic design meets incredible sound. The Pro Max delivers rich, detailed audio and effortless setup for your ecosystem.",
+    "features": [
+      "Spatial Audio",
+      "Automatic Switching",
+      "Transparency Mode",
+      "Touch Controls"
+    ],
+    "specs": {
+      "Chip": "H1 Headphone Chip",
+      "Audio": "Active Noise Cancellation",
+      "Battery": "20 hours",
+      "Weight": "384g"
+    }
+  },
+  {
+    "id": 4,
+    "name": "UltraBook Slim 14",
+    "category": "Computers",
+    "price": "1,299",
+    "tag": "Hot",
+    "image": "/product_laptop.png",
+    "description": "Thin, light, and powerful. The UltraBook Slim 14 is built for professionals who need high performance on the go.",
+    "features": ["Retina Display", "16GB RAM", "512GB SSD", "Backlit Keyboard"],
+    "specs": {
+      "CPU": "Latest Gen i7",
+      "GPU": "Integrated Graphics",
+      "Ports": "Thunderbolt 4",
+      "OS": "Windows 11 Pro"
+    }
+  },
+  {
+    "id": 5,
+    "name": "X-T5 Mirrorless Camera",
+    "category": "Photography",
+    "price": "899",
+    "oldPrice": "999",
+    "image": "/product_camera.png",
+    "description": "Capture the world in stunning detail. The X-T5 combines classic aesthetics with modern mirrorless technology.",
+    "features": [
+      "40MP Sensor",
+      "4K Video",
+      "In-body Stabilization",
+      "Classic Controls"
+    ],
+    "specs": {
+      "Lens Mount": "X-Mount",
+      "Focus": "Hybrid AF",
+      "Screen": "Tilting LCD",
+      "Storage": "Dual SD Slots"
+    }
+  },
+  {
+    "id": 6,
+    "name": "Apex RGB Keyboard",
+    "category": "Gaming",
+    "price": "129",
+    "tag": "New",
+    "image": "/product_keyboard.png",
+    "description": "Elevate your gaming experience. Precision mechanical switches meet vibrant RGB lighting in a compact 75% layout.",
+    "features": [
+      "Mechanical Switches",
+      "Per-key RGB",
+      "PBT Keycaps",
+      "Detachable Cable"
+    ],
+    "specs": {
+      "Switches": "Blue/Red Mechanical",
+      "Layout": "75% Tenkeyless",
+      "Polling Rate": "1000Hz",
+      "Build": "Aluminum Frame"
+    }
+  },
+  {
+    "id": 7,
+    "name": "AURA Smart Speaker",
+    "category": "Audio",
+    "price": "179",
+    "oldPrice": "219",
+    "tag": "Sale",
+    "image": "/hero_speaker.png",
+    "description": "Room-filling sound in a beautiful, compact design. The AURA speaker integrates with your smart home seamlessly.",
+    "features": [
+      "360° Sound",
+      "Voice Assistant Ready",
+      "Multi-room Audio",
+      "Touch Interface"
+    ],
+    "specs": {
+      "Connectivity": "Wi-Fi & Bluetooth",
+      "Power": "50W Output",
+      "Build": "Sustainable Fabrics",
+      "Dimensions": "120x120x180mm"
+    }
+  },
+  {
+    "id": 8,
+    "name": "ClearSound Earbuds",
+    "category": "Audio",
+    "price": "89",
+    "image": "/product_earbuds.png",
+    "description": "Affordable quality. ClearSound earbuds offer reliable performance and clear calls for your daily commute.",
+    "features": [
+      "Stable Bluetooth",
+      "IPX4 Water Resistant",
+      "Compact Case",
+      "Clear Call Quality"
+    ],
+    "specs": {
+      "Driver": "10mm Dynamic",
+      "Battery": "5h Buds + 20h Case",
+      "Range": "10m",
+      "Microphone": "Built-in Dual Mic"
+    }
+  }
+]
