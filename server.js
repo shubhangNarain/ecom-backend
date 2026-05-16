@@ -18,7 +18,7 @@ app.use("/api/v1/users", userRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  connectDb();
+app.listen(PORT, async () => {
+  await connectDb();
   console.log(`Server is running on port ${PORT}`);
 });
