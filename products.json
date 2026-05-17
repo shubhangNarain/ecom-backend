@@ -6,7 +6,7 @@
     "price": "249",
     "oldPrice": "329",
     "tag": "Sale",
-    "image": "/product_headphones.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_headphones_zqa6mr.jpg",
     "description": "Professional-grade noise cancelling headphones designed for creators and music enthusiasts. Experience unrivaled sound clarity and comfort.",
     "features": [
       "Active Noise Cancellation",
@@ -27,7 +27,7 @@
     "category": "Wearables",
     "price": "199",
     "tag": "New",
-    "image": "/product_smartwatch.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_smartwatch_khken4.jpg",
     "description": "The ultimate fitness companion. Track your health, stay connected, and push your limits with the water-resistant FitPulse.",
     "features": [
       "Heart Rate Monitor",
@@ -48,7 +48,7 @@
     "category": "Audio",
     "price": "149",
     "oldPrice": "179",
-    "image": "/product_earbuds.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_earbuds_x6jxco.jpg",
     "description": "Iconic design meets incredible sound. The Pro Max delivers rich, detailed audio and effortless setup for your ecosystem.",
     "features": [
       "Spatial Audio",
@@ -69,7 +69,7 @@
     "category": "Computers",
     "price": "1,299",
     "tag": "Hot",
-    "image": "/product_laptop.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_keyboard_c9dtk8.jpg",
     "description": "Thin, light, and powerful. The UltraBook Slim 14 is built for professionals who need high performance on the go.",
     "features": ["Retina Display", "16GB RAM", "512GB SSD", "Backlit Keyboard"],
     "specs": {
@@ -85,7 +85,7 @@
     "category": "Photography",
     "price": "899",
     "oldPrice": "999",
-    "image": "/product_camera.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_camera_wnrsd0.jpg",
     "description": "Capture the world in stunning detail. The X-T5 combines classic aesthetics with modern mirrorless technology.",
     "features": [
       "40MP Sensor",
@@ -106,7 +106,7 @@
     "category": "Gaming",
     "price": "129",
     "tag": "New",
-    "image": "/product_keyboard.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_keyboard_c9dtk8.jpg",
     "description": "Elevate your gaming experience. Precision mechanical switches meet vibrant RGB lighting in a compact 75% layout.",
     "features": [
       "Mechanical Switches",
@@ -128,7 +128,7 @@
     "price": "179",
     "oldPrice": "219",
     "tag": "Sale",
-    "image": "/hero_speaker.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989900/hero_speaker_hmrjeh.jpg",
     "description": "Room-filling sound in a beautiful, compact design. The AURA speaker integrates with your smart home seamlessly.",
     "features": [
       "360° Sound",
@@ -148,7 +148,7 @@
     "name": "ClearSound Earbuds",
     "category": "Audio",
     "price": "89",
-    "image": "/product_earbuds.png",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_earbuds_x6jxco.jpg",
     "description": "Affordable quality. ClearSound earbuds offer reliable performance and clear calls for your daily commute.",
     "features": [
       "Stable Bluetooth",
