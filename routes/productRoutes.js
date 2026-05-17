@@ -2,7 +2,6 @@ import express from "express";
 import Product from "../models/productModel.js";
 import isAdmin from "../middleware/auth/isAdmin.js";
 import verifyToken from "../middleware/auth/verifyToken.js";
-import upload from "../middleware/upload.js";
 
 const router = express.Router();
 
@@ -30,52 +29,22 @@ router.get("/:id", async (req, res) => {
 });
 
 // CREATE a new product
-router.post("/", verifyToken, isAdmin, upload.single("image"), async (req, res) => {
+router.post("/", verifyToken, isAdmin, async (req, res) => {
   try {
-    let productData = { ...req.body };
-    
-    // If an image was uploaded, add the Cloudinary URL
-    if (req.file) {
-      productData.image = req.file.path;
-    }
-
-    // Parse features and specs if they were sent as JSON strings
-    if (typeof productData.features === "string") {
-      productData.features = JSON.parse(productData.features);
-    }
-    if (typeof productData.specs === "string") {
-      productData.specs = JSON.parse(productData.specs);
-    }
-
-    const newProduct = new Product(productData);
+    const newProduct = new Product(req.body);
     const savedProduct = await newProduct.save();
     res.status(201).json(savedProduct);
   } catch (error) {
-    res.status(400).json({ message: "Error creating product", error: error.message });
+    res.status(400).json({ message: "Error creating product", error });
   }
 });
 
 // UPDATE a product by ID
-router.put("/:id", verifyToken, isAdmin, upload.single("image"), async (req, res) => {
+router.put("/:id", verifyToken, isAdmin, async (req, res) => {
   try {
-    let updateData = { ...req.body };
-
-    // If an image was uploaded, update the Cloudinary URL
-    if (req.file) {
-      updateData.image = req.file.path;
-    }
-
-    // Parse features and specs if they were sent as JSON strings
-    if (typeof updateData.features === "string") {
-      updateData.features = JSON.parse(updateData.features);
-    }
-    if (typeof updateData.specs === "string") {
-      updateData.specs = JSON.parse(updateData.specs);
-    }
-
     const updatedProduct = await Product.findOneAndUpdate(
       { id: req.params.id },
-      updateData,
+      req.body,
       { new: true }
     );
     if (!updatedProduct) {
@@ -83,7 +52,7 @@ router.put("/:id", verifyToken, isAdmin, upload.single("image"), async (req, res
     }
     res.status(200).json(updatedProduct);
   } catch (error) {
-    res.status(400).json({ message: "Error updating product", error: error.message });
+    res.status(400).json({ message: "Error updating product", error });
   }
 });
 
