@@ -69,7 +69,7 @@
     "category": "Computers",
     "price": "1,299",
     "tag": "Hot",
-    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_keyboard_c9dtk8.jpg",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_laptop_xizo0k.jpg",
     "description": "Thin, light, and powerful. The UltraBook Slim 14 is built for professionals who need high performance on the go.",
     "features": ["Retina Display", "16GB RAM", "512GB SSD", "Backlit Keyboard"],
     "specs": {
@@ -162,5 +162,59 @@
       "Range": "10m",
       "Microphone": "Built-in Dual Mic"
     }
+  },
+  {
+    "_id": "6a09434af2e98ae000d74ecb",
+    "id": 9,
+    "name": "iPhone 16 128 GB",
+    "category": "Mobile",
+    "price": "799",
+    "oldPrice": "899",
+    "tag": "Sale",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/w_1000,ar_1:1,c_fill,g_auto,e_art:hokusai/v1778990752/iphone_17_kdwweg.webp",
+    "description": "Meet the new iPhone 17. Designed with contoured edges, thinner borders and durable materials like Ceramic Shield 2 on the front, it looks — and stays — beautiful.",
+    "features": [
+      "Super Retina XDR display",
+      "Ceramic Shield 2 front",
+      "Camera Control",
+      "Action button"
+    ],
+    "specs": {
+      "Display": "ProMotion up to 120Hz",
+      "Glass": "Tougher than any Glass",
+      "Camera": "You never miss a moment",
+      "Dynamic Island": "Bubbles up moments"
+    },
+    "qty": 0,
+    "createdAt": "2026-05-17T04:25:46.727Z",
+    "updatedAt": "2026-05-17T04:25:46.727Z",
+    "__v": 0
+  },
+  {
+    "_id": "6a094aab284ed8615b9332ff",
+    "id": 10,
+    "name": "OnePlus Buds Pro 3",
+    "category": "Audio",
+    "price": "99",
+    "oldPrice": "109",
+    "tag": "Sale",
+    "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778993633/oneplus_pro_3_uxkvqk.jpg",
+    "description": "Wireless Bluetooth Earbuds, Noise Canceling Earbuds, Deep Bass, Immersive Sound, Up to 44 Hour Playtime with Charging case, Midnight Opus",
+    "features": [
+      "Advanced ANC",
+      "Dual-Driver Audio System",
+      "Extended Battery Life",
+      "Fast Charging Technology"
+    ],
+    "specs": {
+      "Water Resistence": "IP55",
+      "Latency": "55ms",
+      "Drivers": "12.4mm",
+      "Active Noise Cancellation": "50db"
+    },
+    "qty": 0,
+    "createdAt": "2026-05-17T04:57:15.645Z",
+    "updatedAt": "2026-05-17T04:57:15.646Z",
+    "__v": 0
   }
 ]

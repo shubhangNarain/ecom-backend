@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import verifyToken from "../middleware/auth/verifyToken.js";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -74,6 +75,37 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Error during login", error });
+  }
+});
+
+// Get user cart
+router.get("/cart", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ cart: user.cart });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching cart", error });
+  }
+});
+
+// Update user cart
+router.put("/cart", verifyToken, async (req, res) => {
+  try {
+    const { cart } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    user.cart = cart;
+    await user.save();
+    
+    res.status(200).json({ message: "Cart updated successfully", cart: user.cart });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating cart", error });
   }
 });
 
