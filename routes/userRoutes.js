@@ -109,4 +109,33 @@ router.put("/cart", verifyToken, async (req, res) => {
   }
 });
 
+// Get user wishlist
+router.get("/wishlist", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ wishlist: user.wishlist || [] });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching wishlist", error: error.message });
+  }
+});
+
+// Update user wishlist
+router.put("/wishlist", verifyToken, async (req, res) => {
+  try {
+    const { wishlist } = req.body;
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.wishlist = wishlist;
+    await user.save();
+    res.status(200).json({ message: "Wishlist updated successfully", wishlist: user.wishlist });
+  } catch (error) {
+    res.status(500).json({ message: "Error updating wishlist", error: error.message });
+  }
+});
+
 export default router;
