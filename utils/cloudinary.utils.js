@@ -5,11 +5,11 @@ const cleanup = (source) => {
   if (!source.startsWith("http") && fs.existsSync(source)) fs.unlinkSync(source);
 };
 
-const uploadOnCloudinary = async (source) => {
+const uploadOnCloudinary = async (source, folder = "user_avatars") => {
   try {
     if (!source) return null;
     const response = await cloudinary.uploader.upload(source, {
-      folder: "user_avatars",
+      folder,
       resource_type: "auto",
     });
     cleanup(source);

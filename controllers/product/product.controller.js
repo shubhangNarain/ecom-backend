@@ -14,6 +14,7 @@ import asyncHandler from "../../utils/asyncHandler.utils.js";
 import ApiError from "../../utils/errorHandler.utils.js";
 import { invalidateCache } from "../../middlewares/cache.middleware.js";
 import { getPaginationParams, paginate } from "../../utils/pagination.utils.js";
+import uploadOnCloudinary from "../../utils/cloudinary.utils.js";
 
 const PRODUCT_CACHE_PATTERN = "cache:/api/v1/products*";
 
@@ -98,4 +99,12 @@ export const bulkDeleteProducts = asyncHandler(async (req, res) => {
   const result = await Product.deleteMany(filter);
   await invalidateCache(PRODUCT_CACHE_PATTERN);
   res.status(200).json({ message: `${result.deletedCount} product(s) deleted` });
+});
+
+export const uploadProductImage = asyncHandler(async (req, res) => {
+  const localPath = req.file?.path;
+  if (!localPath) throw new ApiError(400, "No image file provided");
+  const uploaded = await uploadOnCloudinary(localPath, "products");
+  if (!uploaded) throw new ApiError(500, "Image upload failed");
+  res.status(200).json({ url: uploaded.secure_url });
 });
