@@ -1,15 +1,15 @@
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import Product from "./models/productModel.js";
-import { connectDb } from "./db/db.js";
+import Product from "../models/product.model.js";
+import connectDB from "../config/db.config.js";
 
-dotenv.config();
+// Load environment variables for standalone script execution
+dotenv.config({ path: "./env/.env" });
 
 const seedProducts = async () => {
   try {
-    await connectDb();
+    await connectDB();
 
     // Read products.json
     const productsPath = path.join(process.cwd(), "products.json");

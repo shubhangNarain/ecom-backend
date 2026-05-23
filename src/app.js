@@ -1,13 +1,13 @@
 import express from "express";
-import { connectDb } from "./db/db.js";
-import productRoutes from "./routes/productRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
 import cors from "cors";
+import productRoutes from "../routes/product.route.js";
+import orderRoutes from "../routes/order.route.js";
+import authRoutes from "../routes/auth.routes.js";
+import userRoutes from "../routes/users.route.js";
 
 const app = express();
 
-//middleware
+// middlewares
 app.use(cors());
 app.use(express.json());
 
@@ -21,16 +21,10 @@ app.use((err, req, res, next) => {
   next();
 });
 
-//routes
+// routes
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/orders", orderRoutes);
-app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/users", authRoutes); // register, login
+app.use("/api/v1/users", userRoutes); // cart, wishlist
 
-// database connection
-
-const PORT = process.env.PORT;
-
-Promise.resolve(connectDb());
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+export default app;

@@ -1,11 +1,6 @@
-import express from "express";
-import verifyToken from "../middleware/auth/verifyToken.js";
-import Order from "../models/orderModel.js";
+import Order from "../../models/order.model.js";
 
-const router = express.Router();
-
-// Create new order
-router.post("/", verifyToken, async (req, res) => {
+const createOrder = async (req, res) => {
   try {
     const { items, amount, shippingAddress, paymentId } = req.body;
     
@@ -30,16 +25,15 @@ router.post("/", verifyToken, async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Error creating order", error: error.message });
   }
-});
+};
 
-// Get user orders
-router.get("/", verifyToken, async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user.id }).sort({ createdAt: -1 });
     res.status(200).json(orders);
   } catch (error) {
     res.status(500).json({ message: "Error fetching orders", error: error.message });
   }
-});
+};
 
-export default router;
+export { createOrder, getOrders };
