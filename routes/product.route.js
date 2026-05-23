@@ -1,23 +1,15 @@
 import express from "express";
-import { createProduct, deleteProduct, getProductById, getProducts, updateProduct } from "../controllers/product/product.controller.js";
-import isAdmin from "../middlewares/isAdmin.middleware.js";
-import verifyToken from "../middlewares/verifyToken.middleware.js";
+import {
+  getAllProducts,
+  getProductById,
+  getCategories,
+} from "../controllers/product/product.controller.js";
+import { cache } from "../middlewares/cache.middleware.js";
 
 const router = express.Router();
 
-// GET all products
-router.get("/", getProducts);
-
-// GET a single product by ID
-router.get("/:id", getProductById);
-
-// CREATE a new product
-router.post("/", verifyToken, isAdmin, createProduct);
-
-// UPDATE a product by ID
-router.patch("/:id", verifyToken, isAdmin, updateProduct);
-
-// DELETE a product by ID
-router.delete("/:id", verifyToken, isAdmin, deleteProduct);
+router.get("/categories", cache(600), getCategories);
+router.get("/",           cache(300), getAllProducts);
+router.get("/:id",        cache(300), getProductById);
 
 export default router;

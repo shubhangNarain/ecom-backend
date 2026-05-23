@@ -1,33 +1,49 @@
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
+import mongoose from "mongoose";
 import Product from "../models/product.model.js";
-import connectDB from "../config/db.config.js";
 
-// Load environment variables for standalone script execution
-dotenv.config({ path: "./env/.env" });
+// Setup __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const seedProducts = async () => {
+// Load env configuration relative to the script directory
+dotenv.config({ path: path.resolve(__dirname, "../env/.env") });
+
+async function seed() {
   try {
-    await connectDB();
+    const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+    if (!mongoUri) {
+      throw new Error("No MongoDB URI configured in env/.env");
+    }
 
-    // Read products.json
-    const productsPath = path.join(process.cwd(), "products.json");
-    const productsData = JSON.parse(fs.readFileSync(productsPath, "utf-8"));
+    await mongoose.connect(mongoUri);
+    console.log("Connected to MongoDB");
 
-    // Clear existing products
-    await Product.deleteMany({});
-    console.log("Existing products cleared.");
+    // Read products from local products.json (located in same folder as this script)
+    const jsonPath = path.resolve(__dirname, "products.json");
+    console.log(`Reading local products from: ${jsonPath}`);
+    const productsData = JSON.parse(fs.readFileSync(jsonPath, "utf-8"));
 
-    // Insert new products
-    await Product.insertMany(productsData);
-    console.log(`${productsData.length} products seeded successfully!`);
+    try {
+      await Product.collection.drop();
+      console.log("Dropped products collection to clear old indexes.");
+    } catch (e) {
+      // Collection might not exist yet, ignore
+    }
 
-    process.exit(0);
-  } catch (error) {
-    console.error("Error seeding products:", error);
+    const inserted = await Product.insertMany(productsData, { ordered: false });
+    console.log(`Seeded ${inserted.length} products successfully!`);
+
+  } catch (err) {
+    console.error("Seeder failed:", err.message);
     process.exit(1);
+  } finally {
+    await mongoose.disconnect();
+    console.log("Disconnected from MongoDB");
   }
-};
+}
 
-seedProducts();
+seed();

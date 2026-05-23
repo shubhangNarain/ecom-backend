@@ -1,26 +1,55 @@
+/**
+ * @file user.model.js
+ * @description Mongoose schema and model for application users.
+ *
+ * Fields:
+ *  - name         {string}  required — display name
+ *  - email        {string}  required — login identifier (should be unique; add index if needed)
+ *  - password     {string}  required — bcrypt hash (never returned in responses)
+ *  - role         {string}  "user" | "admin" — controls access to admin endpoints
+ *  - profileImage {string}  URL to avatar (defaults to a placeholder)
+ *  - timestamps           — createdAt, updatedAt added automatically
+ */
+
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ["user", "admin"], default: "user" },
-  wishlist: { type: Array, default: [] },
-  cart: { type: Array, default: [] },
-});
-
-// Hash password before saving
-userSchema.pre("save", async function () {
-  if (!this.isModified("password")) return;
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-// Compare password method
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type:     String,
+      required: true,
+    },
+    email: {
+      type:     String,
+      required: true,
+      unique:   true,
+    },
+    password: {
+      type:     String,
+      required: true,
+    },
+    /** "user" has access to own profile and orders; "admin" has full CRUD access */
+    role: {
+      type:    String,
+      enum:    ["user", "admin"],
+      default: "user",
+    },
+    profileImage: {
+      type:    String,
+      default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+    },
+    wishlist: {
+      type:    Array,
+      default: [],
+    },
+    cart: {
+      type:    Array,
+      default: [],
+    },
+  },
+  { timestamps: true }
+);
 
 const User = mongoose.model("User", userSchema);
+
 export default User;

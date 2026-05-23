@@ -3,14 +3,14 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: "./env/.env" });
 
-const MAX_RETRIES    = 5;
+const MAX_RETRIES = 5;
 const RETRY_DELAY_MS = 5000;
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const connectDB = async (attempt = 1) => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/");
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
     console.log(`MongoDB connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`MongoDB connection attempt ${attempt}/${MAX_RETRIES} failed: ${error.message}`);

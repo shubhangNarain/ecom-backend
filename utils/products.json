@@ -71,7 +71,12 @@
     "tag": "Hot",
     "image": "https://res.cloudinary.com/dqc2c7iyv/image/upload/v1778989899/product_laptop_xizo0k.jpg",
     "description": "Thin, light, and powerful. The UltraBook Slim 14 is built for professionals who need high performance on the go.",
-    "features": ["Retina Display", "16GB RAM", "512GB SSD", "Backlit Keyboard"],
+    "features": [
+      "Retina Display",
+      "16GB RAM",
+      "512GB SSD",
+      "Backlit Keyboard"
+    ],
     "specs": {
       "CPU": "Latest Gen i7",
       "GPU": "Integrated Graphics",

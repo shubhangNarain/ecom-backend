@@ -1,76 +1,101 @@
+/**
+ * @file product.controller.js
+ * @description All product controllers — public reads and admin CRUD.
+ *
+ * Public (no auth):
+ *  - getAllProducts, getCategories, getProductById
+ *
+ * Admin (verifyToken + isAdmin):
+ *  - createProduct, updateProduct, patchProduct, deleteProduct, bulkDeleteProducts
+ */
+
 import Product from "../../models/product.model.js";
+import asyncHandler from "../../utils/asyncHandler.utils.js";
+import ApiError from "../../utils/errorHandler.utils.js";
+import { invalidateCache } from "../../middlewares/cache.middleware.js";
+import { getPaginationParams, paginate } from "../../utils/pagination.utils.js";
 
-const getProducts = async (req, res) => {
-    try {
-        const products = await Product.find();
-        res.status(200).json(products);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching products", error: error.message });
-    }
-}
+const PRODUCT_CACHE_PATTERN = "cache:/api/v1/products*";
 
-const getProductById = async (req, res) => {
-    try {
-        const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
-        const query = isObjectId ? { _id: req.params.id } : { id: req.params.id };
-        const product = await Product.findOne(query);
-        if (!product) {
-            return res.status(404).json({ message: "Product not found!" });
-        }
-        res.status(200).json(product);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching product", error: error.message });
-    }
-}
+// ─── PUBLIC ──────────────────────────────────────────────────────────────────
 
-const createProduct = async (req, res) => {
-    try {
-        const productData = { ...req.body };
-        delete productData._id;
-        delete productData.__v;
-        const newProduct = new Product(productData);
-        const savedProduct = await newProduct.save();
-        res.status(201).json(savedProduct);
-    } catch (error) {
-        res.status(400).json({ message: "Error creating product", error: error.message });
-    }
-}
+export const getAllProducts = asyncHandler(async (req, res) => {
+  const { page, limit, skip } = getPaginationParams(req);
+  const { category, search } = req.query;
 
-const updateProduct = async (req, res) => {
-    try {
-        const updateData = { ...req.body };
-        delete updateData._id;
-        delete updateData.__v;
-        delete updateData.id;
+  const filter = {};
+  if (category) filter.category = category;
+  if (search)   filter.name = { $regex: search, $options: "i" };
 
-        const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
-        const query = isObjectId ? { _id: req.params.id } : { id: req.params.id };
-        const updatedProduct = await Product.findOneAndUpdate(
-            query,
-            updateData,
-            { returnDocument: "after" }
-        );
-        if (!updatedProduct) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-        res.status(200).json(updatedProduct);
-    } catch (error) {
-        res.status(400).json({ message: "Error updating product", error: error.message });
-    }
-}
+  const [products, total] = await Promise.all([
+    Product.find(filter).select("-reviews -meta").skip(skip).limit(limit).lean(),
+    Product.countDocuments(filter),
+  ]);
 
-const deleteProduct = async (req, res) => {
-    try {
-        const isObjectId = /^[0-9a-fA-F]{24}$/.test(req.params.id);
-        const query = isObjectId ? { _id: req.params.id } : { id: req.params.id };
-        const deletedProduct = await Product.findOneAndDelete(query);
-        if (!deletedProduct) {
-            return res.status(404).json({ message: "Product not found" });
-        }
-        res.status(200).json({ message: "Product deleted successfully" });
-    } catch (error) {
-        res.status(500).json({ message: "Error deleting product", error: error.message });
-    }
-}
+  res.status(200).json(paginate(products, total, page, limit, "products"));
+});
 
-export { getProducts, getProductById, createProduct, updateProduct, deleteProduct }
+export const getCategories = asyncHandler(async (_req, res) => {
+  const categories = await Product.distinct("category");
+  res.status(200).json(categories);
+});
+
+export const getProductById = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id).lean();
+  if (!product) throw new ApiError(404, "Product not found");
+  res.status(200).json(product);
+});
+
+// ─── ADMIN ────────────────────────────────────────────────────────────────────
+
+export const createProduct = asyncHandler(async (req, res) => {
+  const { name, price } = req.body;
+  if (!name || price === undefined) throw new ApiError(400, "name and price are required");
+
+  if (!req.body.id) {
+    const maxProduct = await Product.findOne().sort("-id").lean();
+    req.body.id = maxProduct && maxProduct.id ? maxProduct.id + 1 : 1;
+  }
+
+  const product = await Product.create(req.body);
+  await invalidateCache(PRODUCT_CACHE_PATTERN);
+  res.status(201).json(product);
+});
+
+export const updateProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findByIdAndUpdate(
+    req.params.id, { $set: req.body }, { new: true, runValidators: true }
+  );
+  if (!product) throw new ApiError(404, "Product not found");
+  await invalidateCache(PRODUCT_CACHE_PATTERN);
+  res.status(200).json(product);
+});
+
+export const patchProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findByIdAndUpdate(
+    req.params.id, { $set: req.body }, { new: true, runValidators: true }
+  );
+  if (!product) throw new ApiError(404, "Product not found");
+  await invalidateCache(PRODUCT_CACHE_PATTERN);
+  res.status(200).json(product);
+});
+
+export const deleteProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findByIdAndDelete(req.params.id);
+  if (!product) throw new ApiError(404, "Product not found");
+  await invalidateCache(PRODUCT_CACHE_PATTERN);
+  res.status(200).json({ message: "Product deleted successfully" });
+});
+
+export const bulkDeleteProducts = asyncHandler(async (req, res) => {
+  const { ids, category } = req.body;
+  if (!ids?.length && !category) throw new ApiError(400, "Provide ids[] or category to bulk delete");
+
+  const filter = {};
+  if (ids?.length) filter._id = { $in: ids };
+  if (category)    filter.category = category;
+
+  const result = await Product.deleteMany(filter);
+  await invalidateCache(PRODUCT_CACHE_PATTERN);
+  res.status(200).json({ message: `${result.deletedCount} product(s) deleted` });
+});

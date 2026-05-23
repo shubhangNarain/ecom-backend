@@ -1,16 +1,17 @@
 import app from "./src/app.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.config.js";
+import cloudinaryConfig from "./config/cloudinary.config.js";
+import { connectRedis } from "./config/redis.config.js";
 
-// Load environment variables
 dotenv.config({ path: "./env/.env" });
 
-// Connect to Database
+cloudinaryConfig();
 connectDB();
+connectRedis();
 
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, () => {
-  const base = `http://localhost:${PORT}`;
-  console.log(`Server is running on: ${base}`);
+app.listen(process.env.PORT, () => {
+  const base = `http://localhost:${process.env.PORT}`;
+  console.log(`Server   : ${base}`);
+  console.log(`API Docs : ${base}/api-docs`);
 });
