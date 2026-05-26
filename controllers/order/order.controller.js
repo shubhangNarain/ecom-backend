@@ -11,6 +11,7 @@
 
 import Order from "../../models/order.model.js";
 import Product from "../../models/product.model.js";
+import User from "../../models/user.model.js";
 import asyncHandler from "../../utils/asyncHandler.utils.js";
 import ApiError from "../../utils/errorHandler.utils.js";
 import { getPaginationParams, paginate } from "../../utils/pagination.utils.js";
@@ -69,6 +70,19 @@ export const createOrder = asyncHandler(async (req, res) => {
       Product.findByIdAndUpdate(item.product, { $inc: { qty: -item.quantity } })
     )
   );
+
+  // Update user's saved shipping address so it persists across the site
+  await User.findByIdAndUpdate(req.user.id, {
+    $set: {
+      shippingAddress: {
+        address: shippingAddress.street,
+        city: shippingAddress.city,
+        zip: shippingAddress.postalCode,
+        country: shippingAddress.country,
+        phone: shippingAddress.phone,
+      }
+    }
+  });
 
   res.status(201).json(order);
 });

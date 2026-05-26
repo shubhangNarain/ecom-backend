@@ -25,12 +25,18 @@ export const getMe = asyncHandler(async (req, res) => {
 });
 
 export const updateMe = asyncHandler(async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, shippingAddress } = req.body;
   if (req.body.role || req.body.password) {
     throw new ApiError(400, "Use dedicated endpoints to change password or role");
   }
+
+  const updateData = {};
+  if (name !== undefined) updateData.name = name;
+  if (email !== undefined) updateData.email = email;
+  if (shippingAddress !== undefined) updateData.shippingAddress = shippingAddress;
+
   const updated = await User.findByIdAndUpdate(
-    req.user.id, { $set: { name, email } }, { new: true, runValidators: true }
+    req.user.id, { $set: updateData }, { new: true, runValidators: true }
   ).select("-password");
   if (!updated) throw new ApiError(404, "User not found");
   res.status(200).json(updated);

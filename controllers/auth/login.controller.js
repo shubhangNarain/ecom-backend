@@ -72,6 +72,7 @@ const loginController = async (req, res) => {
     email:        user.email,
     role:         user.role,
     profileImage: user.profileImage,
+    shippingAddress: user.shippingAddress || {},
   });
 };
 

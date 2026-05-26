@@ -81,6 +81,7 @@ const registerController = async (req, res) => {
     email:        newUser.email,
     role:         newUser.role,
     profileImage: newUser.profileImage,
+    shippingAddress: newUser.shippingAddress || {},
   });
 
   // Fire-and-forget — email failure must never affect the registration response

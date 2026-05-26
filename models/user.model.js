@@ -46,6 +46,13 @@ const userSchema = new mongoose.Schema(
       type:    Array,
       default: [],
     },
+    shippingAddress: {
+      address: { type: String, default: "" },
+      city: { type: String, default: "" },
+      zip: { type: String, default: "" },
+      country: { type: String, default: "" },
+      phone: { type: String, default: "" },
+    },
   },
   { timestamps: true }
 );

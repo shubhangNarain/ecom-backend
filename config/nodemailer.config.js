@@ -40,21 +40,28 @@ function getTransporter() {
 export async function sendWelcomeEmail(to, name) {
   const transporter = getTransporter();
 
-  const appName = process.env.FROM_NAME || "MERN App";
+  const appName = process.env.FROM_NAME || "JautEr";
 
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 8px;">
-      <h2 style="color: #333;">Welcome, ${name}! 🎉</h2>
-      <p style="color: #555; font-size: 15px;">
-        Thanks for registering with <strong>${appName}</strong>.
-        Your account has been created successfully.
+    <div style="font-family: 'Space Grotesk', 'Inter', Arial, sans-serif; max-width: 600px; margin: auto; padding: 40px; border: 1px solid #f0f0f0; border-radius: 24px; background-color: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+      <div style="text-align: center; margin-bottom: 32px;">
+        <span style="font-size: 28px; font-weight: 800; letter-spacing: -1px; color: #000000; font-family: sans-serif;">
+          Jaut<span style="background-color: #000000; color: #c6f135; padding: 2px 8px; border-radius: 4px; margin-left: 2px;">er</span>
+        </span>
+      </div>
+      <h2 style="color: #111111; font-size: 22px; font-weight: 700; margin-bottom: 16px; font-family: sans-serif;">Welcome, ${name}! 🎉</h2>
+      <p style="color: #555555; font-size: 15px; line-height: 1.6; margin-bottom: 24px; font-family: sans-serif;">
+        Your account has been created successfully. Welcome to <strong>${appName}</strong> — your destination for exclusive drops, premium tech, and fast checkout.
       </p>
-      <p style="color: #555; font-size: 15px;">
-        You can now log in and start exploring.
-      </p>
-      <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-      <p style="color: #aaa; font-size: 12px;">
-        If you didn't create this account, you can safely ignore this email.
+      <div style="text-align: center; margin-top: 32px; margin-bottom: 32px;">
+        <a href="${process.env.CLIENT_URL || '#'}" style="background-color: #000000; color: #ffffff; padding: 14px 28px; text-decoration: none; border-radius: 12px; font-size: 14px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; display: inline-block; font-family: sans-serif;">
+          Start Exploring
+        </a>
+      </div>
+      <hr style="border: none; border-top: 1px solid #f0f0f0; margin: 32px 0;" />
+      <p style="color: #999999; font-size: 11px; text-align: center; line-height: 1.5; font-family: sans-serif;">
+        If you didn't create this account, you can safely ignore this email.<br />
+        &copy; ${new Date().getFullYear()} ${appName} Inc. All rights reserved.
       </p>
     </div>
   `;
