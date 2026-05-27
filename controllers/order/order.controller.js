@@ -61,7 +61,9 @@ export const createOrder = asyncHandler(async (req, res) => {
   });
 
   const itemsTotal = orderItems.reduce((sum, i) => sum + i.subtotal, 0);
-  const grandTotal = itemsTotal + shippingCharge - discount;
+  const subtotalAfterDiscount = itemsTotal - discount;
+  const tax = subtotalAfterDiscount * 0.08;
+  const grandTotal = subtotalAfterDiscount + shippingCharge + tax;
 
   const order = await Order.create({
     user: req.user.id, items: orderItems, shippingAddress, payment,

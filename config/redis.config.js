@@ -125,7 +125,7 @@ export async function connectRedis() {
     const data = await response.json();
     if (data.error) throw new Error(data.error);
     if (data.result === "PONG") {
-      console.log("Upstash Redis connected (HTTP REST API)");
+      console.log("[upstash/redis] : Upstash Redis connected (HTTP REST API)");
       isConnected = true;
     } else {
       throw new Error(`Unexpected PING response: ${JSON.stringify(data)}`);
