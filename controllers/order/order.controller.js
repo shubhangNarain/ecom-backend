@@ -15,8 +15,11 @@ import User from "../../models/user.model.js";
 import asyncHandler from "../../utils/asyncHandler.utils.js";
 import ApiError from "../../utils/errorHandler.utils.js";
 import { getPaginationParams, paginate } from "../../utils/pagination.utils.js";
+import crypto from "crypto";
+import razorpay from "../../config/razorpay.config.js";
 
 const VALID_STATUSES = ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled", "refunded"];
+const USD_TO_INR_RATE = 80;
 
 // ─── USER ─────────────────────────────────────────────────────────────────────
 
@@ -84,7 +87,78 @@ export const createOrder = asyncHandler(async (req, res) => {
     }
   });
 
-  res.status(201).json(order);
+  let razorpayOrder = null;
+  if (payment.method === "razorpay") {
+    try {
+      const amountInINR = Math.round(grandTotal * USD_TO_INR_RATE);
+      const amountInPaise = amountInINR * 100;
+
+      razorpayOrder = await razorpay.orders.create({
+        amount: amountInPaise,
+        currency: "INR",
+        receipt: order._id.toString(),
+      });
+
+      order.payment.razorpayOrderId = razorpayOrder.id;
+      await order.save();
+    } catch (err) {
+      // Revert stock changes and delete order
+      await Promise.all(
+        orderItems.map((item) =>
+          Product.findByIdAndUpdate(item.product, { $inc: { qty: item.quantity } })
+        )
+      );
+      await Order.findByIdAndDelete(order._id);
+      throw new ApiError(500, `Razorpay Order Creation Failed: ${err.message}`);
+    }
+  }
+
+  if (payment.method === "razorpay") {
+    res.status(201).json({
+      ...order.toObject(),
+      razorpayOrder,
+    });
+  } else {
+    res.status(201).json(order);
+  }
+});
+
+export const verifyPayment = asyncHandler(async (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+  const keySecret = (process.env.RAZORPAY_TEST_SECRET || "").trim();
+  const generatedSignature = crypto
+    .createHmac("sha256", keySecret)
+    .update(`${razorpay_order_id}|${razorpay_payment_id}`)
+    .digest("hex");
+
+  if (generatedSignature !== razorpay_signature) {
+    throw new ApiError(400, "Payment verification failed. Invalid signature.");
+  }
+
+  const order = await Order.findOne({ "payment.razorpayOrderId": razorpay_order_id });
+  if (!order) {
+    throw new ApiError(404, "Order not found associated with this Razorpay order ID");
+  }
+
+  order.payment.status = "paid";
+  order.payment.razorpayPaymentId = razorpay_payment_id;
+  order.payment.paidAt = new Date();
+  order.status = "confirmed";
+
+  await order.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Payment verified successfully",
+    order,
+  });
+});
+
+export const getRazorpayKey = asyncHandler(async (req, res) => {
+  res.status(200).json({
+    key: (process.env.RAZORPAY_TEST_KEY || "").trim(),
+  });
 });
 
 export const getMyOrders = asyncHandler(async (req, res) => {
